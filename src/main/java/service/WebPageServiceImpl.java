@@ -1,5 +1,6 @@
 package service;
 
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
@@ -11,6 +12,8 @@ public class WebPageServiceImpl implements WebPageService {
             webClientConfiguration(webClient);
             try {
                 return webClient.getPage(url);
+            } catch (FailingHttpStatusCodeException e){
+                throw new RuntimeException(e);
             } catch (Exception e) {
                 throw new RuntimeException("Could not get page " + url, e);
             }
@@ -20,6 +23,5 @@ public class WebPageServiceImpl implements WebPageService {
     private void webClientConfiguration(WebClient webClient) {
         webClient.getOptions().setCssEnabled(false);
         webClient.getOptions().setJavaScriptEnabled(false);
-        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
     }
 }
